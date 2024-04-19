@@ -4,9 +4,9 @@ IMPORTANT ❗ ❗ ❗ Please remember to destroy all the resources after each wo
 
 1. Authors:
 
-   ***enter your group nr***
+   ***12***
 
-   ***link to forked repo***
+   [Repo](https://github.com/haichangsi/WUT-TBD-PROJ1)
    
 2. Follow all steps in README.md.
 
