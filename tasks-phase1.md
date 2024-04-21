@@ -49,7 +49,27 @@ IMPORTANT ❗ ❗ ❗ Please remember to destroy all the resources after each wo
     - tbd-state-bucket (tbd-2024l-336368-state) in which are stored terraform files, as according to the configuration in *./env/backend.tfvars* which is used during terraform initialization.
     4. Description of network communication (ports, why it is necessary to specify the host for the driver) of Apache Spark running from Vertex AI Workbech
 
-    ![](./report/ex10-1.png)
+    * Driver-Worker Communication:
+        * The driver is responsible for coordinating the execution of Spark jobs. It communicates with the worker nodes to distribute tasks among them.
+        * The driver sends task instructions to the worker nodes, which execute the tasks and return the results.
+        * This communication is necessary for efficient task allocation and management across the cluster.
+    * Driver-Master Communication:
+        * The driver also communicates with the master node to coordinate the overall execution of Spark applications.
+        * It sends heartbeat signals to the master node to indicate its status and receive instructions for task scheduling and resource allocation.
+        * This communication ensures that the cluster resources are utilized optimally and tasks are executed in a coordinated manner.
+    * Worker-Worker Communication:
+        * Worker nodes might also communicate with each other for data exchange or coordination, depending on the specific tasks and data processing requirements.
+        * This communication enables distributed data processing and sharing of intermediate results among worker nodes.
+    * Block Manager Communication:
+        * The block manager, responsible for managing distributed data blocks, listens on port 30001.
+        * This communication facilitates the storage and retrieval of data blocks across the cluster, ensuring efficient data processing and fault tolerance.
+
+It is necessary to specify the host for the driver because the driver initiates communication with other nodes in the cluster.
+By specifying the host, you ensure that the driver knows where to send task instructions and where to listen for responses.
+In the given scenario, specifying the host for the driver (which is listening on port 30000) ensures that it can communicate effectively with the worker nodes and the master node on the same subnet (10.10.10.0/24).
+Without specifying the host, the driver might encounter difficulties in locating and communicating with the necessary components of the Spark cluster, leading to execution errors or inefficiencies.
+
+![](./report/ex10-1.png)
 
     ***place your diagram here***
 
