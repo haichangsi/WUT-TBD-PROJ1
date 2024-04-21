@@ -35,10 +35,18 @@ IMPORTANT ❗ ❗ ❗ Please remember to destroy all the resources after each wo
 10. Draw an architecture diagram (e.g. in draw.io) that includes:
     1. VPC topology with service assignment to subnets
     There are two main subnets in current project:
-    - **Subnet-01**, stated in a *./main.tf*, that is responsible for connecting the vertex_ai_workbench and dataproc modules services. They are both configured to default to *module.vpc.subnets[local.notebook_subnet_id].id* subnet which by default has a name declared in locals.notebook_subnet_name.
+    - **Subnet-01**, stated in a *./main.tf*, that is responsible for connecting the vertex_ai_workbench notebooks and dataproc services. They are both configured to default to *module.vpc.subnets[local.notebook_subnet_id].id* subnet which by default has a name declared in locals.notebook_subnet_name.
     - **composer-subnet-01**, stated in a *./modules/composer/main.tf* as a compute subnetwork is created as an encironment for Cloud Composer.
     2. Description of the components of service accounts
+    There are 3 service accounts in the project.
+    - **LAB** (tbd-terraform) with an address of *tbd-2024l-336368-lab@tbd-2024l-336368.iam.gserviceaccount.com* as declared in *./env/project.tfvars* is responsible for the terraform user existance, which manages all actions on behalf of terraform on the Google Cloud Platform.
+    - **DATA** (tbd-composer-sa) wiwth an adress of *tbd-2024l-336368-data@tbd-2024l-336368.iam.gserviceaccount.com* has a view and edit permissions on respectively Code and Data buckets and has a permissions to edit and use Dataproc as stated in *./modules/composer/main.tf*.
+    - **COMPUTE** (iac) with an adress of *{data.google_project.project.number}-compute@developer.gserviceaccount.com*. It has a Viewer access to notebook-conf bucket, it is also oresponsible for creating and distributing the Access Tokens. In *./cicd_bootstrap/main.tf* it is also indicated this service account is responsible for providing a computing power for Github operations.
     3. List of buckets for disposal
+    - tbd-code-bucket (tbd-2024l-336368-code) in which are stored the code files of Airflow managed by Composer, as according to *./main.tf*
+    - tbd-data-bucket (tbd-2024l-336368-data) in which are stored the files of data pipelines, accordinng to *./main.tf*
+    - notebook-conf-bucket (tbd-2024l-336368-conf) in which is stored the script notebook_post_startup_script.sh, as according to the *./modules/vertex-ai-workbench/main.tf*.
+    - tbd-state-bucket (tbd-2024l-336368-state) in which are stored terraform files, as according to the configuration in *./env/backend.tfvars* which is used during terraform initialization.
     4. Description of network communication (ports, why it is necessary to specify the host for the driver) of Apache Spark running from Vertex AI Workbech
 
     ![](./report/ex10-1.png)
