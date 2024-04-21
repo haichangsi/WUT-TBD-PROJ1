@@ -69,7 +69,7 @@ By specifying the host, you ensure that the driver knows where to send task inst
 In the given scenario, specifying the host for the driver (which is listening on port 30000) ensures that it can communicate effectively with the worker nodes and the master node on the same subnet (10.10.10.0/24).
 Without specifying the host, the driver might encounter difficulties in locating and communicating with the necessary components of the Spark cluster, leading to execution errors or inefficiencies.
 
-![](./report/ex10-1.png)
+![](./report/ex10.png)
 
     ***place your diagram here***
 
