@@ -37,6 +37,10 @@ IMPORTANT ❗ ❗ ❗ Please remember to destroy all the resources after each wo
    ![title](modules/jupyter_docker_image/graph.png)
 9.  Reach YARN UI
 
+    ***describe one selected module and put the output of terraform graph for this module here***
+
+9. Reach YARN UI
+
    ***place the command you used for setting up the tunnel, the port and the screenshot of YARN UI here***
 
 10. Draw an architecture diagram (e.g. in draw.io) that includes:
