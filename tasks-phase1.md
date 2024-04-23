@@ -1,5 +1,5 @@
 IMPORTANT ❗ ❗ ❗ Please remember to destroy all the resources after each work session. You can recreate infrastructure by creating new PR and merging it to master.
-  
+
 ![img.png](doc/figures/destroy.png)
 
 1. Authors:
@@ -7,7 +7,7 @@ IMPORTANT ❗ ❗ ❗ Please remember to destroy all the resources after each wo
    ***12***
 
    [Repo](https://github.com/haichangsi/WUT-TBD-PROJ1)
-   
+
 2. Follow all steps in README.md.
 
 3. Select your project and set budget alerts on 5%, 25%, 50%, 80% of 50$ (in cloud console -> billing -> budget & alerts -> create buget; unclick discounts and promotions&others while creating budget).
@@ -15,50 +15,83 @@ IMPORTANT ❗ ❗ ❗ Please remember to destroy all the resources after each wo
   ![img.png](doc/figures/discounts.png)
 
 5. From avaialble Github Actions select and run destroy on main branch.
-   
+
 7. Create new git branch and:
     1. Modify tasks-phase1.md file.
-    
-    2. Create PR from this branch to **YOUR** master and merge it to make new release. 
-    
+
+    2. Create PR from this branch to **YOUR** master and merge it to make new release.
+
     ***place the screenshot from GA after succesfull application of release***
 
 
 8. Analyze terraform code. Play with terraform plan, terraform graph to investigate different modules.
 
     ***describe one selected module and put the output of terraform graph for this module here***
-   
+
 9. Reach YARN UI
-   
+
    ***place the command you used for setting up the tunnel, the port and the screenshot of YARN UI here***
-   
+
 10. Draw an architecture diagram (e.g. in draw.io) that includes:
     1. VPC topology with service assignment to subnets
+    There are two main subnets in current project:
+    - **Subnet-01**, stated in a *./main.tf*, that is responsible for connecting the vertex_ai_workbench notebooks and dataproc services. They are both configured to default to *module.vpc.subnets[local.notebook_subnet_id].id* subnet which by default has a name declared in locals.notebook_subnet_name.
+    - **composer-subnet-01**, stated in a *./modules/composer/main.tf* as a compute subnetwork is created as an encironment for Cloud Composer.
     2. Description of the components of service accounts
+    There are 3 service accounts in the project.
+    - **LAB** (tbd-terraform) with an address of *tbd-2024l-336368-lab@tbd-2024l-336368.iam.gserviceaccount.com* as declared in *./env/project.tfvars* is responsible for the terraform user existance, which manages all actions on behalf of terraform on the Google Cloud Platform.
+    - **DATA** (tbd-composer-sa) wiwth an adress of *tbd-2024l-336368-data@tbd-2024l-336368.iam.gserviceaccount.com* has a view and edit permissions on respectively Code and Data buckets and has a permissions to edit and use Dataproc as stated in *./modules/composer/main.tf*.
+    - **COMPUTE** (iac) with an adress of *{data.google_project.project.number}-compute@developer.gserviceaccount.com*. It has a Viewer access to notebook-conf bucket, it is also oresponsible for creating and distributing the Access Tokens. In *./cicd_bootstrap/main.tf* it is also indicated this service account is responsible for providing a computing power for Github operations.
     3. List of buckets for disposal
+    - tbd-code-bucket (tbd-2024l-336368-code) in which are stored the code files of Airflow managed by Composer, as according to *./main.tf*
+    - tbd-data-bucket (tbd-2024l-336368-data) in which are stored the files of data pipelines, accordinng to *./main.tf*
+    - notebook-conf-bucket (tbd-2024l-336368-conf) in which is stored the script notebook_post_startup_script.sh, as according to the *./modules/vertex-ai-workbench/main.tf*.
+    - tbd-state-bucket (tbd-2024l-336368-state) in which are stored terraform files, as according to the configuration in *./env/backend.tfvars* which is used during terraform initialization.
     4. Description of network communication (ports, why it is necessary to specify the host for the driver) of Apache Spark running from Vertex AI Workbech
-  
+
+    * Driver-Worker Communication:
+        * The driver is responsible for coordinating the execution of Spark jobs. It communicates with the worker nodes to distribute tasks among them.
+        * The driver sends task instructions to the worker nodes, which execute the tasks and return the results.
+        * This communication is necessary for efficient task allocation and management across the cluster.
+    * Driver-Master Communication:
+        * The driver also communicates with the master node to coordinate the overall execution of Spark applications.
+        * It sends heartbeat signals to the master node to indicate its status and receive instructions for task scheduling and resource allocation.
+        * This communication ensures that the cluster resources are utilized optimally and tasks are executed in a coordinated manner.
+    * Worker-Worker Communication:
+        * Worker nodes might also communicate with each other for data exchange or coordination, depending on the specific tasks and data processing requirements.
+        * This communication enables distributed data processing and sharing of intermediate results among worker nodes.
+    * Block Manager Communication:
+        * The block manager, responsible for managing distributed data blocks, listens on port 30001.
+        * This communication facilitates the storage and retrieval of data blocks across the cluster, ensuring efficient data processing and fault tolerance.
+
+It is necessary to specify the host for the driver because the driver initiates communication with other nodes in the cluster.
+By specifying the host, you ensure that the driver knows where to send task instructions and where to listen for responses.
+In the given scenario, specifying the host for the driver (which is listening on port 30000) ensures that it can communicate effectively with the worker nodes and the master node on the same subnet (10.10.10.0/24).
+Without specifying the host, the driver might encounter difficulties in locating and communicating with the necessary components of the Spark cluster, leading to execution errors or inefficiencies.
+
+![](./report/ex10.png)
+
     ***place your diagram here***
 
 11. Create a new PR and add costs by entering the expected consumption into Infracost
 For all the resources of type: `google_artifact_registry`, `google_storage_bucket`, `google_service_networking_connection`
-create a sample usage profiles and add it to the Infracost task in CI/CD pipeline. Usage file [example](https://github.com/infracost/infracost/blob/master/infracost-usage-example.yml) 
+create a sample usage profiles and add it to the Infracost task in CI/CD pipeline. Usage file [example](https://github.com/infracost/infracost/blob/master/infracost-usage-example.yml)
 
    ***place the expected consumption you entered here***
 
    ***place the screenshot from infracost output here***
 
 11. Create a BigQuery dataset and an external table using SQL
-    
+
     ***place the code and output here***
-   
+
     ***why does ORC not require a table schema?***
 
-  
+
 12. Start an interactive session from Vertex AI workbench:
 
     ***place the screenshot of notebook here***
-   
+
 13. Find and correct the error in spark-job.py
 
     ***describe the cause and how to find the error***
@@ -68,13 +101,13 @@ create a sample usage profiles and add it to the Infracost task in CI/CD pipelin
     1. Add support for arbitrary machine types and worker nodes for a Dataproc cluster and JupyterLab instance
 
     ***place the link to the modified file and inserted terraform code***
-    
+
     3. Add support for preemptible/spot instances in a Dataproc cluster
 
     ***place the link to the modified file and inserted terraform code***
-    
+
     3. Perform additional hardening of Jupyterlab environment, i.e. disable sudo access and enable secure boot
-    
+
     ***place the link to the modified file and inserted terraform code***
 
     4. (Optional) Get access to Apache Spark WebUI
