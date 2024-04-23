@@ -77,6 +77,8 @@ Without specifying the host, the driver might encounter difficulties in locating
 For all the resources of type: `google_artifact_registry`, `google_storage_bucket`, `google_service_networking_connection`
 create a sample usage profiles and add it to the Infracost task in CI/CD pipeline. Usage file [example](https://github.com/infracost/infracost/blob/master/infracost-usage-example.yml)
 
+Except below, the flag --usage-file was required in *pull-request.yml* on task Generate Infracost cost estimate baseline. All the numbers in configuration are made up.
+
    ```.yaml
    version: 0.1
 resource_type_default_usage:
