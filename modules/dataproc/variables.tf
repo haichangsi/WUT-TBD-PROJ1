@@ -24,3 +24,8 @@ variable "image_version" {
   type    = string
   default = "2.1.27-ubuntu20"
 }
+
+variable "no_worker_nodes" {
+  type        = number
+  description = "configurable number of worker nodes"
+}
