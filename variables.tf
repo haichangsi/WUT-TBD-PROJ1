@@ -31,3 +31,9 @@ variable "vertex_machine_type" {
   default     = "e2-standard-2"
   description = "Machine type to be used in the vertexAI notebooks"
 }
+
+variable "dataproc_workers_preemptible" {
+  type        = number
+  default     = 0
+  description = "Number of dataproc preemptible workers"
+}
