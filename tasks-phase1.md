@@ -177,8 +177,10 @@ This information led to the bucket configuration of spark job in *modules/data-p
 14. Additional tasks using Terraform:
 
     1. Add support for arbitrary machine types and worker nodes for a Dataproc cluster and JupyterLab instance
-    test description
-    ***place the link to the modified file and inserted terraform code***
+
+    Requested variables has been created to substitute the hard-coded values.
+
+    <https://github.com/haichangsi/WUT-TBD-PROJ1/commit/2f624f2f14ae3f90c1946fa472467a53e2a488d0>
 
     3. Add support for preemptible/spot instances in a Dataproc cluster
 
