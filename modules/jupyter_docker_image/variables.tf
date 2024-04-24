@@ -6,6 +6,7 @@ variable "registry_hostname" {
 variable "registry_repo_name" {
   type        = string
   description = "Image registry repository name"
+  default     = "tbd-2024l-336368"
 }
 
 variable "jupyterlab_version" {
@@ -29,14 +30,17 @@ variable "gcs_connector_version" {
 variable "project_name" {
   type        = string
   description = "Project name"
+  default     = "tbd-2024l-336368"
 }
 
 variable "dbt_version" {
   type        = string
   description = "dbt core version"
+  default     = "1.7.13"
 }
 
 variable "dbt_spark_version" {
   type        = string
   description = "dbt-spark version"
+  default     = "1.7.1"
 }
