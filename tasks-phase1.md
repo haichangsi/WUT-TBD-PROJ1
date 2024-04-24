@@ -173,7 +173,8 @@ This information led to the bucket configuration of spark job in *modules/data-p
 
     3. Add support for preemptible/spot instances in a Dataproc cluster
 
-    ***place the link to the modified file and inserted terraform code***
+    Included the preemtible configuration in dataproc with the commit:
+    <https://github.com/haichangsi/WUT-TBD-PROJ1/commit/30a95cbfcdeef0d6b7dbc471d8f0bb5d29e96a07>
 
     3. Perform additional hardening of Jupyterlab environment, i.e. disable sudo access and enable secure boot
 
