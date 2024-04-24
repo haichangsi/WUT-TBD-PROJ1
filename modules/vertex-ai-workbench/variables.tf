@@ -33,3 +33,8 @@ variable "ai_notebook_image_tag" {
   type    = string
   default = "latest"
 }
+
+variable "machine_type" {
+  type        = string
+  description = "TBD notebook machine type to be used"
+}
