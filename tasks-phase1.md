@@ -123,6 +123,31 @@ resource_type_default_usage:
 
 13. Find and correct the error in spark-job.py
 
+    The errors can be find by accessing the panel Dataproc->Jobs on the Google Cloud Platform by opening logs of basically any spark job that has finished with an error. It can be observed the error is as follows:
+    ```
+    Traceback (most recent call last):
+    File "/tmp/ec05e5a2-0a9c-457d-9449-4303d369f5c3/spark-job.py", line 42, in <module>
+        df.write.mode("overwrite").orc(DATA_BUCKET)
+    File "/usr/lib/spark/python/lib/pyspark.zip/pyspark/sql/readwriter.py", line 1286, in orc
+    File "/usr/lib/spark/python/lib/py4j-0.10.9.5-src.zip/py4j/java_gateway.py", line 1321, in __call__
+    File "/usr/lib/spark/python/lib/pyspark.zip/pyspark/sql/utils.py", line 190, in deco
+    File "/usr/lib/spark/python/lib/py4j-0.10.9.5-src.zip/py4j/protocol.py", line 326, in get_return_value
+    py4j.protocol.Py4JJavaError: An error occurred while calling o88.orc.
+    : com.google.cloud.hadoop.repackaged.gcs.com.google.api.client.googleapis.json.GoogleJsonResponseException: 404 Not Found
+    POST https://storage.googleapis.com/upload/storage/v1/b/tbd-2024l-9910-data/o?ifGenerationMatch=0&uploadType=multipart
+    {
+    "code" : 404,
+    "errors" : [ {
+        "domain" : "global",
+        "message" : "The specified bucket does not exist.",
+        "reason" : "notFound"
+    } ],
+    "message" : "The specified bucket does not exist."
+    }
+    ```
+
+This information led to the bucket configuration of spark job in *modules/data-pipeline/resources/spark-job.py*, where the main global DATA_BUCKET variable was set to use bucket with hard-coded name. The format was similar, but the index number (being a variable of the project) was different. After changing to "gs://tbd-2024l-336368-data/data/shakespeare/", the job has been able to run properly.
+
     ***describe the cause and how to find the error***
 
 14. Additional tasks using Terraform:
