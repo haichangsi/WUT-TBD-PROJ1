@@ -25,10 +25,17 @@ IMPORTANT ❗ ❗ ❗ Please remember to destroy all the resources after each wo
 
 
 8. Analyze terraform code. Play with terraform plan, terraform graph to investigate different modules.
-
-    ***describe one selected module and put the output of terraform graph for this module here***
-
-9. Reach YARN UI
+   1. The 'jupyter_docker_image' module consists of two resource types: 'docker_image' which builds and tags a Docker image for JupyterLab, specifying build arguments for various software versions and project settings, and uses a directory SHA1 hash as a trigger to rebuild the image if the contents change and 'docker_registry_image' manages the uploading of the Docker image defined by the first resource to a Docker registry, ensuring it is kept remotely. It uses the same SHA1 hash trigger to rebuild the image if any file is added, changed or deleted (a hash is changed).
+   2. graph 
+   
+   The command to generate the graph is as follows:  
+   
+   `terraform graph -type=plan | dot -Tpng > graph.png`  
+   
+   Here is the resulting graph image:
+   
+   ![title](modules/jupyter_docker_image/graph.png)
+9.  Reach YARN UI
 
    ***place the command you used for setting up the tunnel, the port and the screenshot of YARN UI here***
 
@@ -37,17 +44,17 @@ IMPORTANT ❗ ❗ ❗ Please remember to destroy all the resources after each wo
     There are two main subnets in current project:
     - **Subnet-01**, stated in a *./main.tf*, that is responsible for connecting the vertex_ai_workbench notebooks and dataproc services. They are both configured to default to *module.vpc.subnets[local.notebook_subnet_id].id* subnet which by default has a name declared in locals.notebook_subnet_name.
     - **composer-subnet-01**, stated in a *./modules/composer/main.tf* as a compute subnetwork is created as an encironment for Cloud Composer.
-    2. Description of the components of service accounts
+    1. Description of the components of service accounts
     There are 3 service accounts in the project.
     - **LAB** (tbd-terraform) with an address of *tbd-2024l-336368-lab@tbd-2024l-336368.iam.gserviceaccount.com* as declared in *./env/project.tfvars* is responsible for the terraform user existance, which manages all actions on behalf of terraform on the Google Cloud Platform.
     - **DATA** (tbd-composer-sa) wiwth an adress of *tbd-2024l-336368-data@tbd-2024l-336368.iam.gserviceaccount.com* has a view and edit permissions on respectively Code and Data buckets and has a permissions to edit and use Dataproc as stated in *./modules/composer/main.tf*.
     - **COMPUTE** (iac) with an adress of *{data.google_project.project.number}-compute@developer.gserviceaccount.com*. It has a Viewer access to notebook-conf bucket, it is also oresponsible for creating and distributing the Access Tokens. In *./cicd_bootstrap/main.tf* it is also indicated this service account is responsible for providing a computing power for Github operations.
-    3. List of buckets for disposal
+    1. List of buckets for disposal
     - tbd-code-bucket (tbd-2024l-336368-code) in which are stored the code files of Airflow managed by Composer, as according to *./main.tf*
     - tbd-data-bucket (tbd-2024l-336368-data) in which are stored the files of data pipelines, accordinng to *./main.tf*
     - notebook-conf-bucket (tbd-2024l-336368-conf) in which is stored the script notebook_post_startup_script.sh, as according to the *./modules/vertex-ai-workbench/main.tf*.
     - tbd-state-bucket (tbd-2024l-336368-state) in which are stored terraform files, as according to the configuration in *./env/backend.tfvars* which is used during terraform initialization.
-    4. Description of network communication (ports, why it is necessary to specify the host for the driver) of Apache Spark running from Vertex AI Workbech
+    1. Description of network communication (ports, why it is necessary to specify the host for the driver) of Apache Spark running from Vertex AI Workbech
 
     * Driver-Worker Communication:
         * The driver is responsible for coordinating the execution of Spark jobs. It communicates with the worker nodes to distribute tasks among them.
