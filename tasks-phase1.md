@@ -123,10 +123,23 @@ resource_type_default_usage:
 
 11. Create a BigQuery dataset and an external table using SQL
 
-    ***place the code and output here***
+    Necessary steps to run a BQ is to first run the spark job, which creates *.orc files that are necessary to run the query provided in README.md.
+
+    ```.sql
+    CREATE SCHEMA IF NOT EXISTS demo OPTIONS(location = 'europe-west1');
+
+    CREATE OR REPLACE EXTERNAL TABLE demo.shakespeare
+    OPTIONS (
+
+    format = 'ORC',
+    uris = ['gs://tbd-2024l-336368-data/data/shakespeare/*.orc']);
+
+
+    SELECT * FROM demo.shakespeare ORDER BY sum_word_count DESC LIMIT 5;
+    ```
 
     ***why does ORC not require a table schema?***
-
+    ORC is a data format designed for Hadoop, supporting column storage format. For the optimization purposes, it also includes informations on the table schema and indexes in form digestible by most of the Big Data systems.
 
 12. Start an interactive session from Vertex AI workbench:
 
