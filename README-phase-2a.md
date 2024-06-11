@@ -81,7 +81,11 @@ the running instance of your Vertex AI Workbench
 
 8. Analyze tpcdi.py. What happened in the loading stage?
 
-   ***Your answer***
+During loading stage command "process_files" was called with no file_name argument, which let it to default configuration of loading all accessible files.
+
+Those files include (table names in parenthasis): Date.txt (date), DailyMarket.txt (daily_market), Industry.txt (industry), Prospect.csv (prospect), CustomerMgmt.xml (customer_mgmt), TaxRate.txt (tax_rate), HR.csv (hr), WatchHistory.txt (watch_history), Trade.txt (trade), TradeHistory.txt (trade_history), StatusType.txt (status_type), TradeType.txt (trade_type), HoldingHistory.txt (holding_history), CashTransaction.txt (cash_transactionn), FINWIRE (cmp, sec, fin).
+  
+All files are read in to parquet-style dataframe and saved as a table to an environment-defined bucket with a function upload_files.
 
 9. Using SparkSQL answer: how many table were created in each layer?
 
