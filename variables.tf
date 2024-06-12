@@ -43,3 +43,9 @@ variable "no_workers" {
   default     = 2
   description = "number of worker nodes"
 }
+
+variable "no_worker_nodes" {
+  type        = number
+  default     = 2
+  description = "configurable number of worker nodes"
+}

@@ -70,6 +70,7 @@ module "dataproc" {
   machine_type                    = var.dataproc_machine_type
   worker_nodes_number             = var.dataproc_num_workers
   worker_nodes_number_preemptible = var.dataproc_workers_preemptible
+  no_worker_nodes                 = var.no_worker_nodes
 }
 
 ## Uncomment for Dataproc batches (serverless)
