@@ -32,5 +32,6 @@ variable "no_worker_nodes" {
 
 variable "dataproc_workers_preemptible" {
   type        = number
+  default     = 1
   description = "number of preemptible workers in dataproc cluster"
 }
