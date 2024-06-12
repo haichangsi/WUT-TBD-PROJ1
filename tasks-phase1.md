@@ -24,6 +24,17 @@ IMPORTANT ❗ ❗ ❗ Please remember to destroy all the resources after each wo
     ![](report/release-successfull.png)
 
 8. Analyze terraform code. Play with terraform plan, terraform graph to investigate different modules.
+   1. The 'jupyter_docker_image' module consists of two resource types: 'docker_image' which builds and tags a Docker image for JupyterLab, specifying build arguments for various software versions and project settings, and uses a directory SHA1 hash as a trigger to rebuild the image if the contents change and 'docker_registry_image' manages the uploading of the Docker image defined by the first resource to a Docker registry, ensuring it is kept remotely. It uses the same SHA1 hash trigger to rebuild the image if any file is added, changed or deleted (a hash is changed).
+   2. graph 
+   
+   The command to generate the graph is as follows:  
+   
+   `terraform graph -type=plan | dot -Tpng > graph.png`  
+   
+   Here is the resulting graph image:
+   
+   ![title](modules/jupyter_docker_image/graph.png)
+9.  Reach YARN UI
 
     ***describe one selected module and put the output of terraform graph for this module here***
 
