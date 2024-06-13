@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - master
+      - dev
 permissions: read-all
 jobs:
   release:
