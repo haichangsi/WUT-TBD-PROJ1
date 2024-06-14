@@ -74,6 +74,7 @@ the running instance of your Vertex AI Workbench
        "spark.hadoop.hive.metastore.warehouse.dir": "hdfs:///user/hive/warehouse/"
   ```
 
+![](/report/2ex8.png)
 
 7. Explore files created by generator and describe them, including format, content, total size.
 
