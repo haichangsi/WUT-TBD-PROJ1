@@ -176,7 +176,7 @@ resource_type_default_usage:
 
 This information led to the bucket configuration of spark job in *modules/data-pipeline/resources/spark-job.py*, where the main global DATA_BUCKET variable was set to use bucket with hard-coded name. The format was similar, but the index number (being a variable of the project) was different. After changing to "gs://tbd-2024l-336368-data/data/shakespeare/", the job has been able to run properly.
 
-    ![](/report/spark-job.png)
+  ![](/report/spark-job.png)
 
 14. Additional tasks using Terraform:
 
