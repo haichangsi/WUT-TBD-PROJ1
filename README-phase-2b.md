@@ -33,8 +33,8 @@ The results are available in files - [1 worker](/report/run_1_worker.txt), [2 wo
 
 5. Analyze the performance and scalability of execution times of each model. Visualize and discucss the final results.
 
-[](/report/exec%20time%20total.png)
-[](/report/per%20layer%20per%20worker.png)
+![](/report/exec%20time%20total.png)
+![](/report/per%20layer%20per%20worker.png)
 
 As shown on the graphs above, silver layer requires most time to compute, mostly to the sheer size of computed tables.
 
@@ -42,6 +42,6 @@ The graph also shows the inverted dependency of time in relation to number of wo
 
 Below we provide a breakdown through the given models. **ATTENTION:** The Y scale is logaritmic.
 
-[](/report/bronze.png)
-[](/report/silver.png)
-[](/report/gold.png)
+![](/report/bronze.png)
+![](/report/silver.png)
+![](/report/gold.png)
