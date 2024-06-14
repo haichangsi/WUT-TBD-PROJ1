@@ -39,8 +39,7 @@ IMPORTANT ❗ ❗ ❗ Please remember to destroy all the resources after each wo
 
     To reach YARN UI we have tunneled the connection as suggested by GCP using command below:
    ```
-   gcloud compute ssh --zone "europe-west1-c" "tbd-cluster-m" --tunnel-through-iap -
--project "tbd-2024l-336360" -- -L 8088:localhost:8088
+   gcloud compute ssh --zone "europe-west1-c" "tbd-cluster-m" --tunnel-through-iap --project "tbd-2024l-336360" -- -L 8088:localhost:8088
    ```
 
    We have reached interface as presente below:
