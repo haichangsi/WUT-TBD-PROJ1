@@ -143,7 +143,7 @@ Tabele dla wszystkich baz
 
 1.  Add some 3 more [dbt tests](https://docs.getdbt.com/docs/build/tests) and explain what you are testing.
 
-   [](/report/2ex10.png)
+![](/report/2ex10.png)
 
    ```.sql
    select sk_account_id
