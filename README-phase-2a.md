@@ -104,17 +104,21 @@ Analizując notebook:
 
 ![tables_num.png](doc/figures/tables_num.png)
 
-10. Add some 3 more [dbt tests](https://docs.getdbt.com/docs/build/tests) and explain what you are testing. ***Add new tests to your repository.***
+Tabele dla wszystkich baz
+
+![all_dbs_table_num.png](doc/figures/all_dbs_table_num.png)
+
+1.  Add some 3 more [dbt tests](https://docs.getdbt.com/docs/build/tests) and explain what you are testing. ***Add new tests to your repository.***
 
    ***Code and description of your tests***
 
-11. In main.tf update
+2.  In main.tf update
    ```
    dbt_git_repo            = "https://github.com/mwiewior/tbd-tpc-di.git"
    dbt_git_repo_branch     = "main"
    ```
    so dbt_git_repo points to your fork of tbd-tpc-di. 
 
-12. Redeploy infrastructure and check if the DAG finished with no errors:
+3.  Redeploy infrastructure and check if the DAG finished with no errors:
 
 ***The screenshot of Apache Aiflow UI***
