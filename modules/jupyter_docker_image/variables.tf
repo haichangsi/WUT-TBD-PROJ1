@@ -1,12 +1,13 @@
 variable "registry_hostname" {
   type        = string
   description = "Image registry hostname"
+
 }
 
 variable "registry_repo_name" {
   type        = string
   description = "Image registry repository name"
-  default     = "tbd-2024l-336368"
+  default     = "tbd-2024l-336360"
 }
 
 variable "jupyterlab_version" {
@@ -30,7 +31,7 @@ variable "gcs_connector_version" {
 variable "project_name" {
   type        = string
   description = "Project name"
-  default     = "tbd-2024l-336368"
+  default     = "tbd-2024l-336360"
 }
 
 variable "dbt_version" {
