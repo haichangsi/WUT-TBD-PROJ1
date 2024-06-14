@@ -34,13 +34,17 @@ IMPORTANT ❗ ❗ ❗ Please remember to destroy all the resources after each wo
    Here is the resulting graph image:
    
    ![title](modules/jupyter_docker_image/graph.png)
-9.  Reach YARN UI
-
-    ***describe one selected module and put the output of terraform graph for this module here***
 
 9. Reach YARN UI
 
-   ***place the command you used for setting up the tunnel, the port and the screenshot of YARN UI here***
+    To reach YARN UI we have tunneled the connection as suggested by GCP using command below:
+   ```
+   gcloud compute ssh --zone "europe-west1-c" "tbd-cluster-m" --tunnel-through-iap --project "tbd-2024l-336360" -- -L 8088:localhost:8088
+   ```
+
+   We have reached interface as presente below:
+
+  ![](/report/yarn-ui.png)
 
 10. Draw an architecture diagram (e.g. in draw.io) that includes:
     1. VPC topology with service assignment to subnets
@@ -80,8 +84,6 @@ In the given scenario, specifying the host for the driver (which is listening on
 Without specifying the host, the driver might encounter difficulties in locating and communicating with the necessary components of the Spark cluster, leading to execution errors or inefficiencies.
 
 ![](./report/ex10.png)
-
-    ***place your diagram here***
 
 11. Create a new PR and add costs by entering the expected consumption into Infracost
 For all the resources of type: `google_artifact_registry`, `google_storage_bucket`, `google_service_networking_connection`
@@ -138,12 +140,14 @@ resource_type_default_usage:
     SELECT * FROM demo.shakespeare ORDER BY sum_word_count DESC LIMIT 5;
     ```
 
+    ![](report/big-query.png)
+
     ***why does ORC not require a table schema?***
     ORC is a data format designed for Hadoop, supporting column storage format. For the optimization purposes, it also includes informations on the table schema and indexes in form digestible by most of the Big Data systems.
 
 12. Start an interactive session from Vertex AI workbench:
 
-    ***place the screenshot of notebook here***
+![](/report/spark-vertexai.png)
 
 13. Find and correct the error in spark-job.py
 
@@ -172,7 +176,7 @@ resource_type_default_usage:
 
 This information led to the bucket configuration of spark job in *modules/data-pipeline/resources/spark-job.py*, where the main global DATA_BUCKET variable was set to use bucket with hard-coded name. The format was similar, but the index number (being a variable of the project) was different. After changing to "gs://tbd-2024l-336368-data/data/shakespeare/", the job has been able to run properly.
 
-    ***describe the cause and how to find the error***
+  ![](/report/spark-job.png)
 
 14. Additional tasks using Terraform:
 
@@ -189,8 +193,4 @@ This information led to the bucket configuration of spark job in *modules/data-p
 
     3. Perform additional hardening of Jupyterlab environment, i.e. disable sudo access and enable secure boot
 
-    ***place the link to the modified file and inserted terraform code***
-
     4. (Optional) Get access to Apache Spark WebUI
-
-    ***place the link to the modified file and inserted terraform code***

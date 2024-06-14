@@ -12,7 +12,7 @@ locals {
   spark_blockmgr_port     = 30001
   dbt_version             = "1.7.13"
   dbt_spark_version       = "1.7.1"
-  dbt_git_repo            = "https://github.com/haichangsi/tbd-tpc-di.git"
+  dbt_git_repo            = "https://github.com/mwiewior/tbd-tpc-di.git"
   dbt_git_repo_branch     = "main"
 }
 
@@ -59,19 +59,28 @@ module "vertex_ai_workbench" {
   ## To remove before workshop
 }
 
-#
 module "dataproc" {
   depends_on   = [module.vpc]
-  source       = "./modules/dataproc"
+  source       = "github.com/bdg-tbd/tbd-workshop-1.git?ref=v1.0.36/modules/dataproc"
   project_name = var.project_name
   region       = var.region
   subnet       = module.vpc.subnets[local.notebook_subnet_id].id
-  # machine_type = "e2-standard-2"
-  machine_type                    = var.dataproc_machine_type
-  worker_nodes_number             = var.dataproc_num_workers
-  worker_nodes_number_preemptible = var.dataproc_workers_preemptible
-  no_worker_nodes                 = var.no_worker_nodes
+  machine_type = "e2-standard-4"
 }
+
+#
+#module "dataproc" {
+#  depends_on   = [module.vpc]
+#  source       = "./modules/dataproc"
+#  project_name = var.project_name
+#  region       = var.region
+#  subnet       = module.vpc.subnets[local.notebook_subnet_id].id
+#  # machine_type = "e2-standard-2"
+#  machine_type                    = var.dataproc_machine_type
+#  worker_nodes_number             = var.dataproc_num_workers
+#  worker_nodes_number_preemptible = var.dataproc_workers_preemptible
+#  no_worker_nodes                 = var.no_worker_nodes
+#}
 
 ## Uncomment for Dataproc batches (serverless)
 #module "metastore" {
