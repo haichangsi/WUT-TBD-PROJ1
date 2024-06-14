@@ -18,9 +18,9 @@ Worth to read:
 
 2. Authors:
 
-   ***Enter your group nr***
+   ***12***
 
-   ***Link to forked repo***
+   ***[Forked repo](https://github.com/haichangsi/tbd-tpc-di)***
 
 3. Sync your repo with https://github.com/bdg-tbd/tbd-workshop-1.
 
@@ -31,7 +31,7 @@ Worth to read:
     b) upload [tpc-di-setup.ipynb](https://github.com/bdg-tbd/tbd-workshop-1/blob/v1.0.36/notebooks/tpc-di-setup.ipynb) to 
 the running instance of your Vertex AI Workbench
 
-5. In `tpc-di-setup.ipynb` modify cell under section ***Clone tbd-tpc-di repo***:
+1. In `tpc-di-setup.ipynb` modify cell under section ***Clone tbd-tpc-di repo***:
 
    a)first, fork https://github.com/mwiewior/tbd-tpc-di.git to your github organization.
 
@@ -77,7 +77,15 @@ the running instance of your Vertex AI Workbench
 
 7. Explore files created by generator and describe them, including format, content, total size.
 
-   ***Files desccription***
+![files_created.png](doc/figures/files_created.png)
+
+tpcdi.py: skrypt, który ładuje wygenerowane pliki TPC-DI do Data Lakehouse za pomocą PySpark i Google Cloud Storage, definiując funkcje do przetwarzania plików danych i schematów
+
+profiles.yml: plik konfiguracyjny profili DBT, definiujący połączenia z bazami danych i ustawienia, w tym konfiguracje Spark i ustawienia metastore Hive
+
+packages.yml: wymienia zewnętrzne pakiety DBT, które są zależnościami dla projektu, pozwalając na ponowne wykorzystanie funkcjonalności DBT
+
+dbt_project.yml: plik konfiguracyjny projektu DBT, określający nazwę projektu, wersję oraz ścieżki do różnych typów plików DBT (modele, analizy, testy itp.)
 
 8. Analyze tpcdi.py. What happened in the loading stage?
 
