@@ -93,10 +93,16 @@ dbt_project.yml: plik konfiguracyjny projektu DBT, określający nazwę projektu
 - Przesyłanie plików: Przesyła pliki wygenerowane przez TPC-DI do Google Cloud Storage.
 - Przetwarzanie plików: Ładuje pliki CSV i XML do DataFrames, przetwarza dane według zdefiniowanych schematów i zapisuje je jako tabele w formacie Parquet.
 - Przetwarzanie FINWIRE: Parsuje rekordy CMP, SEC, FIN z plików FINWIRE o stałej szerokości pól i zapisuje je do odpowiednich tabel.
+  
+Analizując notebook:
+- Za pomocą narzędzia DIGen.jar generowane są dane TPC-DI.
+- Skrypt tpcdi.py ładuje wygenerowane pliki do określonego etapu (staging) w Google Cloud Storage.
+- Narzędzie dbt (data build tool) uruchamia proces ELT (Extract, Load, Transform) na załadowanych danych.
+- Narzędzie dbt przeprowadza testy na przetworzonych danych.
 
 9. Using SparkSQL answer: how many table were created in each layer?
 
-   ***SparkSQL command and output***
+![tables_num.png](doc/figures/tables_num.png)
 
 10. Add some 3 more [dbt tests](https://docs.getdbt.com/docs/build/tests) and explain what you are testing. ***Add new tests to your repository.***
 
