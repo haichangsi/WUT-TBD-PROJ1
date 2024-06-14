@@ -44,7 +44,8 @@ IMPORTANT ❗ ❗ ❗ Please remember to destroy all the resources after each wo
    ```
 
    We have reached interface as presente below:
-   ![YARN](report/yarn-ui.png)
+
+  ![](/report/yarn-ui.png)
 
 10. Draw an architecture diagram (e.g. in draw.io) that includes:
     1. VPC topology with service assignment to subnets
@@ -147,7 +148,7 @@ resource_type_default_usage:
 
 12. Start an interactive session from Vertex AI workbench:
 
-    [](/report/spark-vertexai.png)
+![](/report/spark-vertexai.png)
 
 13. Find and correct the error in spark-job.py
 
