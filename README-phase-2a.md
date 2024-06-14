@@ -31,7 +31,7 @@ Worth to read:
     b) upload [tpc-di-setup.ipynb](https://github.com/bdg-tbd/tbd-workshop-1/blob/v1.0.36/notebooks/tpc-di-setup.ipynb) to 
 the running instance of your Vertex AI Workbench
 
-1. In `tpc-di-setup.ipynb` modify cell under section ***Clone tbd-tpc-di repo***:
+1. In `tpc-di-setup.ipynb` modify cell under section:
 
    a)first, fork https://github.com/mwiewior/tbd-tpc-di.git to your github organization.
 
@@ -77,28 +77,61 @@ the running instance of your Vertex AI Workbench
 
 7. Explore files created by generator and describe them, including format, content, total size.
 
-![files_created.png](doc/figures/files_created.png)
+![](/report/dir_sizes_ex7.png)
+![](/report/2ex7-sorted.png)
 
-tpcdi.py: skrypt, który ładuje wygenerowane pliki TPC-DI do Data Lakehouse za pomocą PySpark i Google Cloud Storage, definiując funkcje do przetwarzania plików danych i schematów
+W katalogu, w którym zostały wygenerowane dane (/tmp/tpc-di/*), znajdują się następujące foldery:
 
-profiles.yml: plik konfiguracyjny profili DBT, definiujący połączenia z bazami danych i ustawienia, w tym konfiguracje Spark i ustawienia metastore Hive
+Batch1: Największy z podfolderów o rozmiarze 961.8 MB. Zawiera pliki w formacie tekstowym (txt) lub bez rozszerzenia, które zawierają dane tabelaryczne. Dodatkowo, dla każdego pliku z danymi tabelarycznymi znajduje się plik audit (z rozszerzeniem csv), który zawiera statystyki dotyczące odpowiednich tabel, takie jak liczba stworzonych, usuniętych i zmodyfikowanych kont.
+Batch2 i Batch3: Zawierają podobne typy plików co Batch1, ale są dużo mniejsze (mniejsza ilość rekordów). Wszystkie pliki z danymi tabelarycznymi w tych folderach są w formacie txt.
 
-packages.yml: wymienia zewnętrzne pakiety DBT, które są zależnościami dla projektu, pozwalając na ponowne wykorzystanie funkcjonalności DBT
+Oprócz powyższych folderów znajdują się tam też następujące pliki:
 
-dbt_project.yml: plik konfiguracyjny projektu DBT, określający nazwę projektu, wersję oraz ścieżki do różnych typów plików DBT (modele, analizy, testy itp.)
+Batch{nr}_audit.csv: Pliki te zawierają datę początkową i końcową dla danych z poszczególnych podfolderów.
+digen_report.txt: Raport całego procesu generacji danych, zawierający informacje takie jak czas trwania i liczba rekordów.
+Generator_audit.csv: Plik podsumowujący generację danych.
+
+Format:
+Dane są głównie w formacie CSV bez nagłówków, gdzie przecinek (,) jest separatorem w plikach csv, a pionowa kreska (|) w plikach txt. Pliki bez rozszerzenia mają linie o stałej szerokości (głównie FINWIRE). Jeden plik XML bez schematu. Dane audytowe są w plikach CSV z przecinkiem jako separatorem.
+
+Zawartość:
+Pliki zawierają dane z fikcyjnego systemu przetwarzania transakcji online, podzielone na trzy partie: ładowanie historyczne oraz dwie aktualizacje inkrementalne.
+Dane obejmują informacje z finansowego serwisu informacyjnego (FINWIRE), podzielone na wiele plików dla każdego kwartału w Batch1.
+
+Rozmiar danych:
+Łączny rozmiar wynosi 984 MB
+
+Największe pliki:
+DailyMarket.txt: 302.2 MB
+WatchHistory.txt: 136.9 MB
+Trade.txt: 126.1 MB
+
+**UWAGA**: Dane zostały wygenerowane dla wielkości 10. Było to powodowane głównie oczekiwaniami czasowymi oraz perspektywą wyczerpania kredytów na chmurze (po raz drugi).
 
 8. Analyze tpcdi.py. What happened in the loading stage?
 
-- Tworzenie sesji Spark: Ustawia sesję Spark z obsługą Hive i tworzy bazy danych, jeśli jeszcze nie istnieją.
-- Przesyłanie plików: Przesyła pliki wygenerowane przez TPC-DI do Google Cloud Storage.
-- Przetwarzanie plików: Ładuje pliki CSV i XML do DataFrames, przetwarza dane według zdefiniowanych schematów i zapisuje je jako tabele w formacie Parquet.
-- Przetwarzanie FINWIRE: Parsuje rekordy CMP, SEC, FIN z plików FINWIRE o stałej szerokości pól i zapisuje je do odpowiednich tabel.
-  
-Analizując notebook:
-- Za pomocą narzędzia DIGen.jar generowane są dane TPC-DI.
-- Skrypt tpcdi.py ładuje wygenerowane pliki do określonego etapu (staging) w Google Cloud Storage.
-- Narzędzie dbt (data build tool) uruchamia proces ELT (Extract, Load, Transform) na załadowanych danych.
-- Narzędzie dbt przeprowadza testy na przetworzonych danych.
+Etap ładowania skryptu tpcdi.py jest przeznaczony do przetwarzania i ładowania różnych plików danych do środowiska data lakehouse przy użyciu Apache Spark.
+
+Inicjalizacja sesji Spark:
+Skrypt rozpoczyna się od utworzenia sesji Spark przy użyciu funkcji get_session. Sesja ta jest skonfigurowana do obsługi Hive i tworzenia czterech baz danych (digen, bronze, silver, gold), jeśli jeszcze nie istnieją. Następnie sesja przełącza się na bazę danych digen dla kolejnych operacji.
+
+Przetwarzanie plików:
+Funkcja process_files obsługuje główną logikę przetwarzania. Przyjmuje ona kilka parametrów, w tym katalog wyjściowy, nazwę pliku, nazwę etapu, numer partii, flagę nadpisywania, flagę pomijania przesyłania i flagę pokazywania.
+
+Przesyłanie plików:
+Funkcja upload_files przesyła określone pliki do Google Cloud Storage (GCS). Jeśli flaga skip_upload nie jest ustawiona, każdy plik jest przesyłany do zasobnika GCS określonego przez stage_path.
+
+Definicja schematu i ładowanie danych:
+Dla każdego typu pliku skrypt definiuje schemat przy użyciu konstrukcji Spark StructType i StructField. Schemat odpowiada strukturze danych w każdym pliku.
+Funkcja load_csv odczytuje plik do ramki danych Spark DataFrame przy użyciu określonego schematu i separatora. Następnie zapisuje DataFrame, wyświetlając go (jeśli show jest ustawione na True) lub zapisując go w tabeli w formacie Parquet.
+
+Obsługa różnych typów plików:
+Pliki CSV i TXT: Pliki te są odczytywane przy użyciu formatu CSV, z separatorem ustawianym automatycznie na podstawie rozszerzenia pliku.
+Plik XML: Plik CustomerMgmt.xml jest przetwarzany przy użyciu określonego schematu i ładowany za pomocą parsera XML, wybierając odpowiednie pola i przekształcając je w DataFrame.
+Pliki FINWIRE: Te pliki o stałej szerokości są przetwarzane przez odczytanie całego wiersza jako pojedynczego ciągu znaków. DataFrame jest następnie dzielony na trzy typy rekordów (CMP, SEC, FIN) w oparciu o pole rec_type i odpowiednio analizowany.
+
+Zapisywanie ramek DataFrame:
+Przetworzone ramki danych są wyświetlane lub zapisywane jako tabele w formacie zgodnym z Hive, w zależności od wartości parametru show.
 
 9. Using SparkSQL answer: how many table were created in each layer?
 
@@ -108,9 +141,34 @@ Tabele dla wszystkich baz
 
 ![all_dbs_table_num.png](doc/figures/all_dbs_table_num.png)
 
-1.  Add some 3 more [dbt tests](https://docs.getdbt.com/docs/build/tests) and explain what you are testing. ***Add new tests to your repository.***
+1.  Add some 3 more [dbt tests](https://docs.getdbt.com/docs/build/tests) and explain what you are testing.
 
-   ***Code and description of your tests***
+   [](/report/2ex10.png)
+
+   ```.sql
+   select sk_account_id
+from {{ ref('dim_account') }}
+where effective_timestamp > end_timestamp
+   ```
+   ^ Sprawdzannie czy account nie został zamknięty przed utworzeniem
+
+   ```.sql
+   select
+    sk_customer_id,
+    first_name,
+    last_name
+from {{ ref('dim_customer') }}
+where sk_customer_id is null and first_name is null and last_name is null
+   ```
+   ^ Sprawdzanie czy któryś z klientów nie jest nieidentyfikowalny
+
+   ```.sql
+   select 
+    sk_trade_id
+from {{ ref('fact_trade') }} 
+where sk_trade_id is null
+   ```
+   ^ Sprawdzenie czy nie ma nullowych id wymian handlowych
 
 2.  In main.tf update
    ```
@@ -119,6 +177,4 @@ Tabele dla wszystkich baz
    ```
    so dbt_git_repo points to your fork of tbd-tpc-di. 
 
-3.  Redeploy infrastructure and check if the DAG finished with no errors:
-
-***The screenshot of Apache Aiflow UI***
+3.  Redeploy infrastructure and check if the DAG finished with no errors
