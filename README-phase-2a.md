@@ -89,7 +89,10 @@ dbt_project.yml: plik konfiguracyjny projektu DBT, określający nazwę projektu
 
 8. Analyze tpcdi.py. What happened in the loading stage?
 
-   ***Your answer***
+- Tworzenie sesji Spark: Ustawia sesję Spark z obsługą Hive i tworzy bazy danych, jeśli jeszcze nie istnieją.
+- Przesyłanie plików: Przesyła pliki wygenerowane przez TPC-DI do Google Cloud Storage.
+- Przetwarzanie plików: Ładuje pliki CSV i XML do DataFrames, przetwarza dane według zdefiniowanych schematów i zapisuje je jako tabele w formacie Parquet.
+- Przetwarzanie FINWIRE: Parsuje rekordy CMP, SEC, FIN z plików FINWIRE o stałej szerokości pól i zapisuje je do odpowiednich tabel.
 
 9. Using SparkSQL answer: how many table were created in each layer?
 
