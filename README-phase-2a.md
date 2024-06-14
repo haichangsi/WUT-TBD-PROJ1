@@ -18,23 +18,11 @@ Worth to read:
 
 2. Authors:
 
-   ***Enter your group nr***
+   ***12***
 
-   ***Link to forked repo***
+   ***[Forked repo](https://github.com/haichangsi/tbd-tpc-di)***
 
-3. Replace your `main.tf` (in the root module) from the phase 1 with [main.tf](https://github.com/bdg-tbd/tbd-workshop-1/blob/v1.0.36/main.tf)
-and change each module `source` reference from the repo relative path to a github repo tag `v1.0.36` , e.g.:
-```hcl
-module "dbt_docker_image" {
-  depends_on = [module.composer]
-  source             = "github.com/bdg-tbd/tbd-workshop-1.git?ref=v1.0.36/modules/dbt_docker_image"
-  registry_hostname  = module.gcr.registry_hostname
-  registry_repo_name = coalesce(var.project_name)
-  project_name       = var.project_name
-  spark_version      = local.spark_version
-}
-```
-
+3. Sync your repo with https://github.com/bdg-tbd/tbd-workshop-1.
 
 4. Provision your infrastructure.
 
@@ -43,7 +31,7 @@ module "dbt_docker_image" {
     b) upload [tpc-di-setup.ipynb](https://github.com/bdg-tbd/tbd-workshop-1/blob/v1.0.36/notebooks/tpc-di-setup.ipynb) to 
 the running instance of your Vertex AI Workbench
 
-5. In `tpc-di-setup.ipynb` modify cell under section ***Clone tbd-tpc-di repo***:
+1. In `tpc-di-setup.ipynb` modify cell under section ***Clone tbd-tpc-di repo***:
 
    a)first, fork https://github.com/mwiewior/tbd-tpc-di.git to your github organization.
 
@@ -89,27 +77,48 @@ the running instance of your Vertex AI Workbench
 
 7. Explore files created by generator and describe them, including format, content, total size.
 
-   ***Files desccription***
+![files_created.png](doc/figures/files_created.png)
+
+tpcdi.py: skrypt, który ładuje wygenerowane pliki TPC-DI do Data Lakehouse za pomocą PySpark i Google Cloud Storage, definiując funkcje do przetwarzania plików danych i schematów
+
+profiles.yml: plik konfiguracyjny profili DBT, definiujący połączenia z bazami danych i ustawienia, w tym konfiguracje Spark i ustawienia metastore Hive
+
+packages.yml: wymienia zewnętrzne pakiety DBT, które są zależnościami dla projektu, pozwalając na ponowne wykorzystanie funkcjonalności DBT
+
+dbt_project.yml: plik konfiguracyjny projektu DBT, określający nazwę projektu, wersję oraz ścieżki do różnych typów plików DBT (modele, analizy, testy itp.)
 
 8. Analyze tpcdi.py. What happened in the loading stage?
 
-   ***Your answer***
+- Tworzenie sesji Spark: Ustawia sesję Spark z obsługą Hive i tworzy bazy danych, jeśli jeszcze nie istnieją.
+- Przesyłanie plików: Przesyła pliki wygenerowane przez TPC-DI do Google Cloud Storage.
+- Przetwarzanie plików: Ładuje pliki CSV i XML do DataFrames, przetwarza dane według zdefiniowanych schematów i zapisuje je jako tabele w formacie Parquet.
+- Przetwarzanie FINWIRE: Parsuje rekordy CMP, SEC, FIN z plików FINWIRE o stałej szerokości pól i zapisuje je do odpowiednich tabel.
+  
+Analizując notebook:
+- Za pomocą narzędzia DIGen.jar generowane są dane TPC-DI.
+- Skrypt tpcdi.py ładuje wygenerowane pliki do określonego etapu (staging) w Google Cloud Storage.
+- Narzędzie dbt (data build tool) uruchamia proces ELT (Extract, Load, Transform) na załadowanych danych.
+- Narzędzie dbt przeprowadza testy na przetworzonych danych.
 
 9. Using SparkSQL answer: how many table were created in each layer?
 
-   ***SparkSQL command and output***
+![tables_num.png](doc/figures/tables_num.png)
 
-10. Add some 3 more [dbt tests](https://docs.getdbt.com/docs/build/tests) and explain what you are testing. ***Add new tests to your repository.***
+Tabele dla wszystkich baz
+
+![all_dbs_table_num.png](doc/figures/all_dbs_table_num.png)
+
+1.  Add some 3 more [dbt tests](https://docs.getdbt.com/docs/build/tests) and explain what you are testing. ***Add new tests to your repository.***
 
    ***Code and description of your tests***
 
-11. In main.tf update
+2.  In main.tf update
    ```
    dbt_git_repo            = "https://github.com/mwiewior/tbd-tpc-di.git"
    dbt_git_repo_branch     = "main"
    ```
    so dbt_git_repo points to your fork of tbd-tpc-di. 
 
-12. Redeploy infrastructure and check if the DAG finished with no errors:
+3.  Redeploy infrastructure and check if the DAG finished with no errors:
 
 ***The screenshot of Apache Aiflow UI***

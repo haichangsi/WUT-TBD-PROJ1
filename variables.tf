@@ -37,3 +37,15 @@ variable "dataproc_workers_preemptible" {
   default     = 0
   description = "Number of dataproc preemptible workers"
 }
+
+variable "no_workers" {
+  type        = number
+  default     = 2
+  description = "number of worker nodes"
+}
+
+variable "no_worker_nodes" {
+  type        = number
+  default     = 2
+  description = "configurable number of worker nodes"
+}
